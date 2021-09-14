@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useCallback, useState } from 'react';
 import { useQuery } from 'react-query';
 
 import type { Staff } from '../../../../../shared/types';
@@ -21,9 +21,19 @@ interface UseStaff {
 export function useStaff(): UseStaff {
   // for filtering staff by treatment
   const [filter, setFilter] = useState('all');
+  // cache the functionn
+  const selectFn = useCallback(
+    // ... also utilised within react-query
+    (unfilteredStaff) => filterByTreatment(unfilteredStaff, filter),
+    // only requery if filter changes
+    [filter],
+  );
 
   const fallback = [];
-  const { data: staff = fallback } = useQuery(queryKeys.staff, getStaff);
+  const { data: staff = fallback } = useQuery(queryKeys.staff, getStaff, {
+    select: filter === 'all' ? undefined : selectFn, // select !option for prefetch queries
+    //   keepPreviousData: true, // not a good option here, uncomment to see why
+  });
 
   return { staff, filter, setFilter };
 }
