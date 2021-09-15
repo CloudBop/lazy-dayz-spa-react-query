@@ -16,6 +16,12 @@ import { AppointmentDateMap } from '../types';
 import { getAvailableAppointments } from '../utils';
 import { getMonthYearDetails, getNewMonthYear, MonthYear } from './monthYear';
 
+// react-query odefault options - out of function to stop useEffect compaining
+const commonOptions = {
+  staleTime: 0, // rq default - overrule global rq config
+  cacheTime: 300000, // 5m
+};
+
 // for useQuery call
 async function getAppointments(
   year: string,
@@ -73,7 +79,6 @@ export function useAppointments(): UseAppointments {
   /** ****************** END 2: filter appointments  ******************** */
   /** ****************** START 3: useQuery  ***************************** */
   // useQuery call for appointments for the current monthYear
-
   // prefect next month when monthYear changes - this is technically stale rq will also refetch to check for new data
   const queryClient = useQueryClient();
   useEffect(() => {
@@ -82,6 +87,7 @@ export function useAppointments(): UseAppointments {
     queryClient.prefetchQuery(
       [queryKeys.appointments, nextMonthYear.year, nextMonthYear.month],
       () => getAppointments(nextMonthYear.year, nextMonthYear.month),
+      commonOptions,
     );
   }, [queryClient, monthYear]);
   // Notes:
@@ -97,6 +103,10 @@ export function useAppointments(): UseAppointments {
     {
       select: showAll ? undefined : selectFn, // select !option for prefetch queries
       //   keepPreviousData: true, // not a good option here, uncomment to see why
+      ...commonOptions,
+      refetchOnMount: true,
+      refetchOnWindowFocus: true,
+      refetchOnReconnect: true,
     },
   );
   /** ****************** END 3: useQuery  ******************************* */
