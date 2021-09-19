@@ -107,6 +107,8 @@ export function useAppointments(): UseAppointments {
       refetchOnMount: true,
       refetchOnWindowFocus: true,
       refetchOnReconnect: true,
+      // poll the server
+      // refetchInterval: 1000, // one second, not recomended for production
     },
   );
   /** ****************** END 3: useQuery  ******************************* */
