@@ -49,8 +49,11 @@ export function useUser(): UseUser {
 
   // TODO: call useQuery to update user data from server
   useQuery(queryKeys.user, () => getUser(user), {
-    enabled: !user,
-    onSuccess: (axiosResponse) => setUser(axiosResponse?.data?.user),
+    enabled: !!user,
+    // updating onSuccess based on changes in React Query
+    // see https://www.udemy.com/course/learn-react-query/learn/#questions/15581842/ for more details
+    // onSuccess: (axiosResponse) => setUser(axiosResponse?.data?.user)
+    onSuccess: (data: User) => setUser(data),
   });
 
   // meant to be called from useAuth
