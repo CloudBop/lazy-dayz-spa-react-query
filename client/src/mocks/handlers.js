@@ -17,7 +17,7 @@ export const handlers = [
   rest.get(
     'http://localhost:3030/appointments/:month/:year',
     (req, res, ctx) => {
-      return res(ctx.json({ appointments: mockAppointments }));
+      return res(ctx.json(mockAppointments));
     },
   ),
   rest.get('http://localhost:3030/user/:id/appointments', (req, res, ctx) => {
