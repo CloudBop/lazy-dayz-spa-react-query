@@ -30,6 +30,9 @@ test('handles query error', async () => {
     rest.get('http://localhost:3030/staff', (req, res, ctx) => {
       return res(ctx.status(500));
     }),
+    rest.get('http://localhost:3030/treatments', (req, res, ctx) => {
+      return res(ctx.status(500));
+    }),
   );
   // supress react-query erros
   setLogger({
