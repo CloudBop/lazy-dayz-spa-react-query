@@ -25,7 +25,7 @@ export function generateQueryClient(): QueryClient {
       queries: {
         onError: queryErrorHandler,
         staleTime: 600000, // 10m
-        cacheTime: 900000, // 15m
+        cacheTime: 900000, // 15m -  default cacheTime is 5 minutes; doesn't make sense for staleTime to exceed cacheTime
         refetchOnMount: false,
         refetchOnWindowFocus: false,
         refetchOnReconnect: false,
