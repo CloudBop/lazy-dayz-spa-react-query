@@ -1,19 +1,27 @@
+// eslint-disable no-console
 import { render, RenderResult } from '@testing-library/react';
 import { ReactElement } from 'react';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider, setLogger } from 'react-query';
+import { generateQueryClient } from 'react-query/queryClient';
 
 // import { defaultQueryClientOptions } from '../react-query/queryClient';
-
+setLogger({
+  log: console.log,
+  warn: console.warn,
+  error: () => {
+    // swallow react-query erros without printing out
+  },
+});
 // fn to generate unique query client for each test
-const generateQueryClient = () => {
-  return new QueryClient();
+const generateTestQueryClient = () => {
+  return generateQueryClient();
 };
 
 export function renderWithQueryClient(
   ui: ReactElement,
   client?: QueryClient,
 ): RenderResult {
-  const queryClient = client ?? generateQueryClient();
+  const queryClient = client ?? generateTestQueryClient();
 
   return render(
     <QueryClientProvider client={queryClient}> {ui}</QueryClientProvider>,
