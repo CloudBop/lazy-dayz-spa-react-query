@@ -14,7 +14,11 @@ setLogger({
 });
 // fn to generate unique query client for each test
 const generateTestQueryClient = () => {
-  return generateQueryClient();
+  const client = generateQueryClient();
+  // stop default retries
+  const opts = client.getDefaultOptions();
+  opts.queries = { ...opts.queries, retry: false };
+  return client;
 };
 
 export function renderWithQueryClient(
