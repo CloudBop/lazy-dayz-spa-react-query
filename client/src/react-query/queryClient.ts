@@ -19,16 +19,23 @@ export function queryErrorHandler(error: unknown): void {
   toast({ id, title, status: 'error', variant: 'subtle', isClosable: true });
 }
 
-// to satisfy typescript until this file has uncommented contents
-export const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      onError: queryErrorHandler,
-      staleTime: 600000, // 10m
-      cacheTime: 900000, // 15m
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
+export function generateQueryClient(): QueryClient {
+  return new QueryClient({
+    defaultOptions: {
+      queries: {
+        onError: queryErrorHandler,
+        staleTime: 600000, // 10m
+        cacheTime: 900000, // 15m
+        refetchOnMount: false,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
+      },
+      mutations: {
+        onError: queryErrorHandler,
+      },
     },
-  },
-});
+  });
+}
+
+// to satisfy typescript until this file has uncommented contents
+export const queryClient = generateQueryClient();
