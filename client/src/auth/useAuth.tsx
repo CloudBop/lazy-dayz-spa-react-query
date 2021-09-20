@@ -40,7 +40,7 @@ export function useAuth(): UseAuth {
         // update stored user data
         updateUser(data.user);
       }
-    } catch (errorResponse) {
+    } catch (errorResponse: any) {
       toast({
         title: errorResponse?.response?.data?.message || SERVER_ERROR,
         status: 'error',
